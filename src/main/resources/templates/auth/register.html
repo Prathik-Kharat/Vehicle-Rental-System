@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Register')}">
+    <title>Register | VRental</title>
+</head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<div class="container">
+    <div class="form-card">
+        <h2>Create Account</h2>
+        <div th:replace="~{fragments/layout :: alerts}"></div>
+        <form th:action="@{/auth/register}" th:object="${user}" method="post">
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <input id="name" type="text" th:field="*{name}" required placeholder="Your full name"/>
+                <small class="alert alert-error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></small>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input id="email" type="email" th:field="*{email}" required placeholder="your@email.com"/>
+                <small class="alert alert-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></small>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input id="password" type="password" th:field="*{password}" required placeholder="Min 6 characters"/>
+                <small class="alert alert-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></small>
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone</label>
+                <input id="phone" type="tel" th:field="*{phone}" placeholder="10-digit mobile number"/>
+            </div>
+            <div class="form-group">
+                <label for="role">Role</label>
+                <select id="role" th:field="*{role}">
+                    <option value="CUSTOMER">Customer</option>
+                    <option value="ADMIN">Admin</option>
+                </select>
+                <small class="alert alert-error" th:if="${#fields.hasErrors('role')}" th:errors="*{role}"></small>
+            </div>
+            <button type="submit" class="btn btn-primary btn-full">Register</button>
+        </form>
+        <p class="text-center mt-1">Already have an account? <a th:href="@{/auth/login}">Login</a></p>
+    </div>
+</div>
+</body>
+</html>
