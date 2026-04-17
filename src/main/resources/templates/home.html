@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Home')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<div class="hero">
+    <h1>Rent a Vehicle, Anywhere</h1>
+    <p>Browse <strong th:text="${availableCount}">0</strong> vehicles available right now.</p>
+    <a th:href="@{/vehicles}" class="btn btn-primary">Browse Vehicles</a>
+</div>
+<div class="container features">
+    <div class="feature-card"><span class="icon">🚗</span><h3>Wide Selection</h3><p>Cars, bikes, SUVs, trucks and more.</p></div>
+    <div class="feature-card"><span class="icon">📅</span><h3>Easy Booking</h3><p>Book in minutes, manage anytime.</p></div>
+    <div class="feature-card"><span class="icon">🛡️</span><h3>Optional Addons</h3><p>GPS, insurance, child seat available.</p></div>
+</div>
+</body>
+</html>

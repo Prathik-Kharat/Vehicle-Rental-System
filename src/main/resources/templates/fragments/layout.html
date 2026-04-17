@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:fragment="head(title)">
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title th:text="${title} + ' | VRental'">VRental</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<nav th:fragment="navbar">
+    <div class="nav-brand"><a th:href="@{/}">🚗 VRental</a></div>
+    <div class="nav-links">
+        <a th:href="@{/vehicles}">Vehicles</a>
+        <span sec:authorize="isAuthenticated()">
+            <a th:href="@{/bookings/my}">My Bookings</a>
+            <a th:href="@{/rentals/history}">Rental History</a>
+        </span>
+        <span sec:authorize="hasRole('ADMIN')">
+            <a th:href="@{/admin}">Admin Panel</a>
+        </span>
+        <span sec:authorize="isAuthenticated()">
+            <a th:href="@{/dashboard}">Dashboard</a>
+            <a th:href="@{/profile}">Profile</a>
+            <form th:action="@{/auth/logout}" method="post" style="display:inline">
+                <button type="submit" class="btn-link">Logout</button>
+            </form>
+        </span>
+        <span sec:authorize="!isAuthenticated()">
+            <a th:href="@{/auth/login}">Login</a>
+            <a th:href="@{/auth/register}">Register</a>
+        </span>
+    </div>
+</nav>
+<div th:fragment="alerts">
+    <div class="alert alert-success" th:if="${success}" th:text="${success}"></div>
+    <div class="alert alert-error" th:if="${error}" th:text="${error}"></div>
+</div>
+</body>
+</html>

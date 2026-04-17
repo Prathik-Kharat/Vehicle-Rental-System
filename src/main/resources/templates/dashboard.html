@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Dashboard')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<div class="container">
+    <div th:replace="~{fragments/layout :: alerts}"></div>
+    <h2>Welcome, <span th:text="${user.name}">User</span>!</h2>
+    <div class="stats-row">
+        <div class="stat-card"><h3 th:text="${myBookings.size()}">0</h3><p>Total Bookings</p></div>
+    </div>
+    <h3>My Recent Bookings</h3>
+    <table class="table" th:if="${!myBookings.isEmpty()}">
+        <thead><tr><th>ID</th><th>Vehicle</th><th>Start</th><th>End</th><th>Amount</th><th>Status</th><th>Action</th></tr></thead>
+        <tbody>
+        <tr th:each="b : ${myBookings}">
+            <td th:text="${b.id}"></td>
+            <td th:text="${b.vehicle.brand + ' ' + b.vehicle.model}"></td>
+            <td th:text="${b.startDate}"></td>
+            <td th:text="${b.endDate}"></td>
+            <td th:text="'₹' + ${b.totalAmount}"></td>
+            <td><span class="badge" th:text="${b.status}"></span></td>
+            <td><a th:href="@{/bookings/{id}(id=${b.id})}" class="btn btn-sm">View</a></td>
+        </tr>
+        </tbody>
+    </table>
+    <p th:if="${myBookings.isEmpty()}">No bookings yet. <a th:href="@{/vehicles}">Browse vehicles</a></p>
+</div>
+</body>
+</html>
