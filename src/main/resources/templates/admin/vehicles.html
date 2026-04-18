@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Manage Vehicles')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<div class="container">
+    <div th:replace="~{fragments/layout :: alerts}"></div>
+    <div class="page-header">
+        <h2>Manage Vehicles</h2>
+        <a th:href="@{/vehicles/admin/new}" class="btn btn-primary">+ Add Vehicle</a>
+    </div>
+    <table class="table">
+        <thead><tr><th>ID</th><th>Brand</th><th>Model</th><th>Reg #</th><th>Type</th><th>Price/Day</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody>
+        <tr th:each="v : ${vehicles}">
+            <td th:text="${v.id}"></td>
+            <td th:text="${v.brand}"></td>
+            <td th:text="${v.model}"></td>
+            <td th:text="${v.registrationNumber}"></td>
+            <td th:text="${v.type}"></td>
+            <td>₹<span th:text="${v.pricePerDay}"></span></td>
+            <td><span class="badge" th:text="${v.status}"></span></td>
+            <td>
+                <a th:href="@{/vehicles/admin/{id}/edit(id=${v.id})}" class="btn btn-sm">Edit</a>
+                <form th:if="${v.status.name() != 'UNDER_MAINTENANCE'}"
+                      th:action="@{/vehicles/admin/{id}/maintenance(id=${v.id})}" method="post" style="display:inline">
+                    <button type="submit" class="btn btn-sm">Maintenance</button>
+                </form>
+                <form th:if="${v.status.name() == 'UNDER_MAINTENANCE'}"
+                      th:action="@{/vehicles/admin/{id}/available(id=${v.id})}" method="post" style="display:inline">
+                    <button type="submit" class="btn btn-sm btn-secondary">Mark Available</button>
+                </form>
+                <form th:action="@{/vehicles/admin/{id}/delete(id=${v.id})}" method="post" style="display:inline">
+                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Delete?')">Delete</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Vehicle Form')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<div class="container">
+    <div class="form-card">
+        <h2 th:text="${vehicle.id != null ? 'Edit Vehicle' : 'Add Vehicle'}"></h2>
+        <form th:action="@{/vehicles/admin/save}" method="post">
+            <input type="hidden" name="id" th:value="${vehicle.id}"/>
+            <div class="form-group"><label>Brand</label><input type="text" name="brand" th:value="${vehicle.brand}" required/></div>
+            <div class="form-group"><label>Model</label><input type="text" name="model" th:value="${vehicle.model}" required/></div>
+            <div class="form-group"><label>Registration #</label><input type="text" name="registrationNumber" th:value="${vehicle.registrationNumber}" required/></div>
+            <div class="form-group">
+                <label>Type</label>
+                <select name="type">
+                    <option th:each="t : ${types}" th:value="${t}" th:text="${t}" th:selected="${t == vehicle.type}"></option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Status</label>
+                <select name="status" th:if="${statuses != null}">
+                    <option th:each="s : ${statuses}" th:value="${s}" th:text="${s}" th:selected="${s == vehicle.status}"></option>
+                </select>
+            </div>
+            <div class="form-group"><label>Price/Day (₹)</label><input type="number" name="pricePerDay" step="0.01" th:value="${vehicle.pricePerDay}" required/></div>
+            <div class="form-group"><label>Seats</label><input type="number" name="seats" th:value="${vehicle.seats}"/></div>
+            <div class="form-group"><label>Fuel Type</label><input type="text" name="fuelType" th:value="${vehicle.fuelType}"/></div>
+            <div class="form-group"><label>Transmission</label><input type="text" name="transmission" th:value="${vehicle.transmission}"/></div>
+            <div class="form-group"><label>Description</label><textarea name="description" th:text="${vehicle.description}"></textarea></div>
+            <button type="submit" class="btn btn-primary btn-full">Save Vehicle</button>
+            <a th:href="@{/admin/vehicles}" class="btn btn-secondary btn-full">Cancel</a>
+        </form>
+    </div>
+</div>
+</body>
+</html>

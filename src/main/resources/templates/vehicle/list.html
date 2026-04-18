@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Vehicles')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<div class="container">
+    <h2>Available Vehicles</h2>
+    <form th:action="@{/vehicles}" method="get" class="filter-form">
+        <input type="number" name="maxPrice" step="0.01" min="0" placeholder="Max price/day"
+               th:value="${selectedMaxPrice}"/>
+        <select name="type" onchange="this.form.submit()">
+            <option value="">All Types</option>
+            <option th:each="t : ${types}" th:value="${t}" th:text="${t}"
+                    th:selected="${t.name() == selectedType}"></option>
+        </select>
+        <button type="submit" class="btn btn-sm">Apply Filters</button>
+        <a th:href="@{/vehicles}" class="btn btn-secondary btn-sm">Reset</a>
+    </form>
+    <div class="vehicle-grid">
+        <div class="vehicle-card" th:each="v : ${vehicles}">
+            <div class="vehicle-type-badge" th:text="${v.type}"></div>
+            <h3 th:text="${v.brand + ' ' + v.model}">Vehicle</h3>
+            <p>Seats: <span th:text="${v.seats}"></span> | <span th:text="${v.fuelType}"></span> | <span th:text="${v.transmission}"></span></p>
+            <p class="price">₹<span th:text="${v.pricePerDay}"></span>/day</p>
+            <a th:href="@{/bookings/new/{id}(id=${v.id})}" class="btn btn-primary">Book Now</a>
+            <a th:href="@{/vehicles/{id}(id=${v.id})}" class="btn btn-secondary">Details</a>
+        </div>
+    </div>
+    <p th:if="${vehicles.isEmpty()}">No vehicles available for selected filters.</p>
+</div>
+</body>
+</html>
