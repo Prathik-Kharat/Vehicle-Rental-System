@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Rentals')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<div class="container">
+    <div th:replace="~{fragments/layout :: alerts}"></div>
+    <h2>All Rentals</h2>
+    <table class="table">
+        <thead><tr><th>ID</th><th>Booking</th><th>Vehicle</th><th>Customer</th><th>Pickup</th><th>Return</th><th>Status</th><th>Action</th></tr></thead>
+        <tbody>
+        <tr th:each="r : ${rentals}">
+            <td th:text="${r.id}"></td>
+            <td th:text="${r.booking.id}"></td>
+            <td th:text="${r.booking.vehicle.brand + ' ' + r.booking.vehicle.model}"></td>
+            <td th:text="${r.booking.user.name}"></td>
+            <td th:text="${r.actualPickupDate ?: '-'}"></td>
+            <td th:text="${r.actualReturnDate ?: '-'}"></td>
+            <td><span class="badge" th:text="${r.status}"></span></td>
+            <td><a th:href="@{/rentals/{id}(id=${r.id})}" class="btn btn-sm">Manage</a></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

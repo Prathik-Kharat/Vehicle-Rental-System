@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Invoice')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<div class="container">
+    <div class="invoice-card">
+        <div class="invoice-header">
+            <h1>🚗 VRental</h1>
+            <h2>INVOICE</h2>
+        </div>
+        <p><strong>Invoice #:</strong> INV-<span th:text="${rental.id}"></span></p>
+        <p><strong>Customer:</strong> <span th:text="${rental.booking.user.name}"></span> (<span th:text="${rental.booking.user.email}"></span>)</p>
+        <p><strong>Vehicle:</strong> <span th:text="${rental.booking.vehicle.brand + ' ' + rental.booking.vehicle.model}"></span></p>
+        <p><strong>Reg #:</strong> <span th:text="${rental.booking.vehicle.registrationNumber}"></span></p>
+        <hr/>
+        <p><strong>Booked Period:</strong> <span th:text="${rental.booking.startDate}"></span> to <span th:text="${rental.booking.endDate}"></span></p>
+        <p><strong>Actual Pickup:</strong> <span th:text="${rental.actualPickupDate}"></span></p>
+        <p><strong>Actual Return:</strong> <span th:text="${rental.actualReturnDate}"></span></p>
+        <hr/>
+        <table class="table">
+            <tr><td>Base Amount</td><td>₹<span th:text="${rental.baseAmount}"></span></td></tr>
+            <tr><td>Addon Charges</td><td>₹<span th:text="${rental.addonAmount}"></span></td></tr>
+            <tr><td>Late Fee</td><td>₹<span th:text="${rental.lateFee}"></span></td></tr>
+            <tr class="total-row"><td><strong>Total</strong></td><td><strong>₹<span th:text="${rental.totalAmount}"></span></strong></td></tr>
+        </table>
+        <div class="invoice-footer">Thank you for choosing VRental!</div>
+        <button onclick="window.print()" class="btn btn-primary">Print Invoice</button>
+        <a th:href="@{/dashboard}" class="btn btn-secondary">Home</a>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Rental History')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<div class="container">
+    <h2>Rental History</h2>
+    <table class="table" th:if="${!rentals.isEmpty()}">
+        <thead><tr><th>Rental ID</th><th>Vehicle</th><th>Pickup</th><th>Return</th><th>Total</th><th>Status</th><th>Invoice</th></tr></thead>
+        <tbody>
+        <tr th:each="r : ${rentals}">
+            <td th:text="${r.id}"></td>
+            <td th:text="${r.booking.vehicle.brand + ' ' + r.booking.vehicle.model}"></td>
+            <td th:text="${r.actualPickupDate ?: '-'}"></td>
+            <td th:text="${r.actualReturnDate ?: '-'}"></td>
+            <td th:text="${r.totalAmount != null ? '₹' + r.totalAmount : '-'}"></td>
+            <td><span class="badge" th:text="${r.status}"></span></td>
+            <td>
+                <a th:href="@{/rentals/{id}/invoice(id=${r.id})}" class="btn btn-sm"
+                   th:if="${r.status.name() == 'INVOICE_GENERATED'}">View</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <p th:if="${rentals.isEmpty()}">No rental history found.</p>
+</div>
+</body>
+</html>
