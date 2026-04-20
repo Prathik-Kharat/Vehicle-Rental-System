@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Rental Detail')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<div class="container">
+    <div th:replace="~{fragments/layout :: alerts}"></div>
+    <div class="detail-card">
+        <h2>Rental #<span th:text="${rental.id}"></span></h2>
+        <p><strong>Booking ID:</strong> <span th:text="${rental.booking.id}"></span></p>
+        <p><strong>Customer:</strong> <span th:text="${rental.booking.user.name}"></span></p>
+        <p><strong>Vehicle:</strong> <span th:text="${rental.booking.vehicle.brand + ' ' + rental.booking.vehicle.model}"></span></p>
+        <p><strong>Booked:</strong> <span th:text="${rental.booking.startDate}"></span> to <span th:text="${rental.booking.endDate}"></span></p>
+        <p><strong>Actual Pickup:</strong> <span th:text="${rental.actualPickupDate ?: 'Not picked up'}"></span></p>
+        <p><strong>Actual Return:</strong> <span th:text="${rental.actualReturnDate ?: 'Not returned'}"></span></p>
+        <p><strong>Status:</strong> <span class="badge" th:text="${rental.status}"></span></p>
+
+        <!-- Mark Pickup -->
+        <form th:action="@{/rentals/{id}/pickup(id=${rental.id})}" method="post"
+              th:if="${rental.status.name() == 'PENDING'}">
+            <div class="form-group">
+                <label>Actual Pickup Date</label>
+                <input type="date" name="pickupDate" required/>
+            </div>
+            <button type="submit" class="btn btn-primary">Mark Picked Up</button>
+        </form>
+
+        <!-- Mark Return -->
+        <form th:action="@{/rentals/{id}/return(id=${rental.id})}" method="post"
+              th:if="${rental.status.name() == 'PICKED_UP'}">
+            <div class="form-group">
+                <label>Actual Return Date</label>
+                <input type="date" name="returnDate" required/>
+            </div>
+            <button type="submit" class="btn btn-primary">Mark Returned</button>
+        </form>
+
+        <!-- Generate Invoice -->
+        <form th:action="@{/rentals/{id}/invoice(id=${rental.id})}" method="post"
+              th:if="${rental.status.name() == 'RETURNED'}">
+            <button type="submit" class="btn btn-success">Generate Invoice</button>
+        </form>
+
+        <a th:href="@{/rentals/{id}/invoice(id=${rental.id})}" class="btn btn-secondary"
+           th:if="${rental.status.name() == 'INVOICE_GENERATED'}">View Invoice</a>
+        <a th:href="@{/rentals}" class="btn btn-secondary">Back</a>
+    </div>
+</div>
+</body>
+</html>

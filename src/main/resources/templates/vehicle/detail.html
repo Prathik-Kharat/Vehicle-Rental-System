@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Vehicle Details')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<div class="container">
+    <div class="detail-card">
+        <h2 th:text="${vehicle.brand + ' ' + vehicle.model}"></h2>
+        <p><strong>Type:</strong> <span th:text="${vehicle.type}"></span></p>
+        <p><strong>Registration:</strong> <span th:text="${vehicle.registrationNumber}"></span></p>
+        <p><strong>Seats:</strong> <span th:text="${vehicle.seats}"></span></p>
+        <p><strong>Fuel:</strong> <span th:text="${vehicle.fuelType}"></span></p>
+        <p><strong>Transmission:</strong> <span th:text="${vehicle.transmission}"></span></p>
+        <p><strong>Status:</strong> <span class="badge" th:text="${vehicle.status}"></span></p>
+        <p class="price">₹<span th:text="${vehicle.pricePerDay}"></span>/day</p>
+        <p th:if="${vehicle.description}" th:text="${vehicle.description}"></p>
+
+        <hr style="margin:1rem 0"/>
+        <h3>Addon Pricing Preview (Decorator)</h3>
+        <ul>
+            <li><strong th:text="${baseDescription}"></strong> — ₹<span th:text="${basePrice}"></span>/day</li>
+            <li><strong th:text="${withGpsDescription}"></strong> — ₹<span th:text="${withGpsPrice}"></span>/day</li>
+            <li><strong th:text="${withInsuranceDescription}"></strong> — ₹<span th:text="${withInsurancePrice}"></span>/day</li>
+            <li><strong th:text="${withChildSeatDescription}"></strong> — ₹<span th:text="${withChildSeatPrice}"></span>/day</li>
+            <li><strong th:text="${withAllDescription}"></strong> — ₹<span th:text="${withAllPrice}"></span>/day</li>
+        </ul>
+
+        <a th:href="@{/bookings/new/{id}(id=${vehicle.id})}" class="btn btn-primary"
+           th:if="${vehicle.status.name() == 'AVAILABLE'}">Book This Vehicle</a>
+        <a th:href="@{/vehicles}" class="btn btn-secondary">Back</a>
+    </div>
+</div>
+</body>
+</html>

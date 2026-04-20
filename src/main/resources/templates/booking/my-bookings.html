@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('My Bookings')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<div class="container">
+    <div th:replace="~{fragments/layout :: alerts}"></div>
+    <h2>My Bookings</h2>
+    <table class="table" th:if="${!bookings.isEmpty()}">
+        <thead><tr><th>ID</th><th>Vehicle</th><th>Start</th><th>End</th><th>Amount</th><th>Status</th><th>Action</th></tr></thead>
+        <tbody>
+        <tr th:each="b : ${bookings}">
+            <td th:text="${b.id}"></td>
+            <td th:text="${b.vehicle.brand + ' ' + b.vehicle.model}"></td>
+            <td th:text="${b.startDate}"></td>
+            <td th:text="${b.endDate}"></td>
+            <td>₹<span th:text="${b.totalAmount}"></span></td>
+            <td><span class="badge" th:text="${b.status}"></span></td>
+            <td><a th:href="@{/bookings/{id}(id=${b.id})}" class="btn btn-sm">View</a></td>
+        </tr>
+        </tbody>
+    </table>
+    <p th:if="${bookings.isEmpty()}">No bookings found. <a th:href="@{/vehicles}">Book a vehicle</a></p>
+</div>
+</body>
+</html>

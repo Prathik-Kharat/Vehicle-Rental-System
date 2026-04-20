@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Book Vehicle')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<div class="container">
+    <div th:replace="~{fragments/layout :: alerts}"></div>
+    <div class="form-card">
+        <h2>Book: <span th:text="${vehicle.brand + ' ' + vehicle.model}"></span></h2>
+        <p class="price">Base: ₹<span th:text="${vehicle.pricePerDay}"></span>/day</p>
+        <form th:action="@{/bookings/create}" method="post">
+            <input type="hidden" name="vehicleId" th:value="${vehicle.id}"/>
+            <div class="form-group">
+                <label>Pickup Date</label>
+                <input type="date" name="startDate" th:min="${today}" required/>
+            </div>
+            <div class="form-group">
+                <label>Return Date</label>
+                <input type="date" name="endDate" th:min="${today}" required/>
+            </div>
+            <div class="form-group">
+                <label>Optional Addons</label>
+                <div class="addon-list">
+                    <label><input type="checkbox" name="withGps" value="true"/> GPS (+₹5/day)</label>
+                    <label><input type="checkbox" name="withInsurance" value="true"/> Insurance (+₹10/day)</label>
+                    <label><input type="checkbox" name="withChildSeat" value="true"/> Child Seat (+₹3/day)</label>
+                </div>
+            </div>
+            <p class="small">All addons: <em th:text="${decoratedDescription}"></em> → ₹<span th:text="${decoratedPrice}"></span>/day</p>
+            <button type="submit" class="btn btn-primary btn-full">Confirm Booking</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>
