@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Users')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<div class="container">
+    <div th:replace="~{fragments/layout :: alerts}"></div>
+    <h2>All Users</h2>
+    <table class="table">
+        <thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Role</th><th>Active</th><th>Action</th></tr></thead>
+        <tbody>
+        <tr th:each="u : ${users}">
+            <td th:text="${u.id}"></td>
+            <td th:text="${u.name}"></td>
+            <td th:text="${u.email}"></td>
+            <td th:text="${u.phone}"></td>
+            <td><span class="badge" th:text="${u.role}"></span></td>
+            <td th:text="${u.active ? 'Yes' : 'No'}"></td>
+            <td>
+                <form th:action="@{/admin/users/{id}/deactivate(id=${u.id})}" method="post" th:if="${u.active}">
+                    <button type="submit" class="btn btn-sm btn-danger">Deactivate</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

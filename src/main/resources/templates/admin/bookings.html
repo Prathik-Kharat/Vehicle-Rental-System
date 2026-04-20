@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('All Bookings')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<div class="container">
+    <h2>All Bookings</h2>
+    <table class="table">
+        <thead><tr><th>ID</th><th>Customer</th><th>Vehicle</th><th>Start</th><th>End</th><th>Amount</th><th>Status</th><th>Action</th></tr></thead>
+        <tbody>
+        <tr th:each="b : ${bookings}">
+            <td th:text="${b.id}"></td>
+            <td th:text="${b.user.name}"></td>
+            <td th:text="${b.vehicle.brand + ' ' + b.vehicle.model}"></td>
+            <td th:text="${b.startDate}"></td>
+            <td th:text="${b.endDate}"></td>
+            <td>₹<span th:text="${b.totalAmount}"></span></td>
+            <td><span class="badge" th:text="${b.status}"></span></td>
+            <td>
+                <form th:action="@{/rentals/create/{id}(id=${b.id})}" method="post"
+                      th:if="${b.status.name() == 'CONFIRMED'}">
+                    <button type="submit" class="btn btn-sm btn-success">Create Rental</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

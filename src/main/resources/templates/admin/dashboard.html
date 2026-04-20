@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Admin Dashboard')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<div class="container">
+    <div th:replace="~{fragments/layout :: alerts}"></div>
+    <h2>Admin Dashboard</h2>
+    <div class="stats-row">
+        <div class="stat-card"><h3 th:text="${totalUsers}">0</h3><p>Total Users</p></div>
+        <div class="stat-card"><h3 th:text="${totalVehicles}">0</h3><p>Total Vehicles</p></div>
+        <div class="stat-card"><h3 th:text="${totalBookings}">0</h3><p>Total Bookings</p></div>
+        <div class="stat-card"><h3 th:text="${activeRentals}">0</h3><p>Active Rentals</p></div>
+    </div>
+    <div class="quick-links">
+        <a th:href="@{/admin/users}" class="btn btn-primary">Manage Users</a>
+        <a th:href="@{/admin/vehicles}" class="btn btn-primary">Manage Vehicles</a>
+        <a th:href="@{/admin/bookings}" class="btn btn-primary">View Bookings</a>
+        <a th:href="@{/rentals}" class="btn btn-primary">Manage Rentals</a>
+    </div>
+</div>
+</body>
+</html>
