@@ -1,16 +1,24 @@
 package com.vehiclerental;
 
+import com.vehiclerental.entity.Booking;
+import com.vehiclerental.entity.User;
+import com.vehiclerental.entity.Vehicle;
+import com.vehiclerental.repository.BookingRepository;
 import com.vehiclerental.repository.UserRepository;
+import com.vehiclerental.repository.VehicleRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -20,6 +28,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -37,6 +46,12 @@ class AuthFlowIntegrationTest {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private VehicleRepository vehicleRepository;
+
+    @Autowired
+    private BookingRepository bookingRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -96,6 +111,39 @@ class AuthFlowIntegrationTest {
 
         mockMvc.perform(get("/dashboard").session(authenticatedSession))
             .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser(username = "confirm.user@example.com", roles = "CUSTOMER")
+    void bookingConfirmPage_shouldRenderSuccessfully_forBookingOwner() throws Exception {
+        User user = new User();
+        user.setName("Confirm User");
+        user.setEmail("confirm.user@example.com");
+        user.setPassword(passwordEncoder.encode("secret123"));
+        user.setRole(User.Role.CUSTOMER);
+        User savedUser = userRepository.save(user);
+
+        Vehicle vehicle = new Vehicle();
+        vehicle.setBrand("Toyota");
+        vehicle.setModel("Corolla");
+        vehicle.setRegistrationNumber("TEST-REG-001");
+        vehicle.setType(Vehicle.VehicleType.CAR);
+        vehicle.setStatus(Vehicle.VehicleStatus.AVAILABLE);
+        vehicle.setPricePerDay(BigDecimal.valueOf(80));
+        Vehicle savedVehicle = vehicleRepository.save(vehicle);
+
+        Booking booking = new Booking();
+        booking.setUser(savedUser);
+        booking.setVehicle(savedVehicle);
+        booking.setStartDate(LocalDate.now().plusDays(1));
+        booking.setEndDate(LocalDate.now().plusDays(2));
+        booking.setTotalAmount(BigDecimal.valueOf(80));
+        booking.setStatus(Booking.BookingStatus.CONFIRMED);
+        Booking savedBooking = bookingRepository.save(booking);
+
+        mockMvc.perform(get("/bookings/{id}/confirm", savedBooking.getId()))
+            .andExpect(status().isOk())
+            .andExpect(view().name("booking/confirm"));
     }
 
     private String extractCsrfToken(String html) {

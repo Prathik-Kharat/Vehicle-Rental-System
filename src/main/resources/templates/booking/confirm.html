@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Booking Confirmed | VRental</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<div class="container">
+    <div th:replace="~{fragments/layout :: alerts}"></div>
+
+    <div class="detail-card">
+        <h2>✅ Booking Confirmed</h2>
+        <p>Your booking has been successfully created.</p>
+
+        <p><strong>Booking ID:</strong> <span th:text="${booking.id}"></span></p>
+        <p><strong>Vehicle:</strong> <span th:text="${booking.vehicle.brand + ' ' + booking.vehicle.model}"></span></p>
+        <p><strong>From:</strong> <span th:text="${booking.startDate}"></span></p>
+        <p><strong>To:</strong> <span th:text="${booking.endDate}"></span></p>
+        <p><strong>Total:</strong> ₹<span th:text="${booking.totalAmount}"></span></p>
+        <p><strong>Status:</strong> <span class="badge" th:text="${booking.status}"></span></p>
+
+        <div style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+            <a th:href="@{/bookings/{id}(id=${booking.id})}" class="btn btn-primary">View Booking Details</a>
+            <a th:href="@{/bookings/my}" class="btn btn-secondary">My Bookings</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

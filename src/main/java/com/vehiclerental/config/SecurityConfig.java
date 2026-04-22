@@ -19,6 +19,8 @@ import org.springframework.security.web.SecurityFilterChain;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+    private static final String ADMIN_ROLE = "ADMIN";
+
     // Inject repository directly to avoid circular dependency with UserService
     private final UserRepository userRepository;
 
@@ -53,9 +55,10 @@ public class SecurityConfig {
             .authenticationProvider(authProvider())
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/", "/auth/**", "/css/**", "/js/**", "/vehicles", "/vehicles/{id}").permitAll()
-                .requestMatchers("/admin/**").hasRole("ADMIN")
+                .requestMatchers("/actuator/**").hasRole(ADMIN_ROLE)
+                .requestMatchers("/admin/**").hasRole(ADMIN_ROLE)
                 .requestMatchers("/rentals", "/rentals/{id}/pickup", "/rentals/{id}/return",
-                                 "/rentals/{id}/invoice", "/rentals/create/**").hasRole("ADMIN")
+                                 "/rentals/{id}/invoice", "/rentals/create/**").hasRole(ADMIN_ROLE)
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form
